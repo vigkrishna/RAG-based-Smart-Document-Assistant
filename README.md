@@ -1,6 +1,6 @@
 ### Overview
 
-This project implements a **Retrieval-Augmented Generation (RAG)** pipeline for efficient document processing and knowledge retrieval. It extracts text and tables from PDFs using the **Unstructured** library, stores raw PDFs in **Redis**, and indexes extracted embeddings in **PGVector** for semantic search. The system leverages **MultiVector Retriever** for context retrieval before querying an **LLM (GPT model)**.
+This project implements a **Retrieval-Augmented Generation (RAG)** pipeline for efficient document processing and knowledge retrieval. It extracts text and tables from PDFs using the **Unstructured** library, stores raw PDFs in **Redis**, and indexes extracted embeddings in **PGVector** for semantic search. The system leverages **MultiVector Retriever** for context retrieval before querying an **LLM (Gemini model)**.
 
 **Live Site:** 🌐 [smart-doc-assistant.streamlit.app](https://smart-doc-assistant.streamlit.app/)
 
@@ -16,7 +16,7 @@ This project implements a **Retrieval-Augmented Generation (RAG)** pipeline for 
 - **Redis for Raw Storage**: Stores and retrieves raw PDFs efficiently, to implement persistent storage.  
 - **PGVector for Vector Storage**: Indexes and retrieves high-dimensional embeddings for similarity search.  
 - **MultiVector Retriever**: Optimized for retrieving contextual information from multiple sources.  
-- **LLM Integration**: Uses a **GPT model** to generate responses based on retrieved context.  
+- **LLM Integration**: Uses a **Gemini model** to generate responses based on retrieved context.  
 
 ### Tech Stack
 
@@ -28,11 +28,11 @@ This project implements a **Retrieval-Augmented Generation (RAG)** pipeline for 
 - `pgvector`
 - `redis`
 - `langchain`
-- `openai`
+- `gemini-flash`
 
 #### Databases
 - **Redis**: For raw PDF storage  
 - **PostgreSQL + PGVector**: For embeddings storage  
 
 #### LLM
-- **GPT** (via OpenAI API or local model)
+- **Gemini-Flash** (via Gemini API Key)
