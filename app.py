@@ -15,7 +15,7 @@ from datetime import datetime
 # LangChain
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-from langchain.chains import RetrievalQA
+
 from langchain_core.prompts import ChatPromptTemplate
 
 # Embeddings (LOCAL – NO QUOTA)
@@ -71,43 +71,39 @@ def load_vector_store():
     return None
 
 
-# Step 5: RAG Chain
+from langchain_core.runnables import RunnablePassthrough
+
 def get_rag_chain(api_key, retriever):
     llm = ChatGoogleGenerativeAI(
-        
-        model="gemini-3-flash-preview",
-
+         model="gemini-3-flash-preview",
         temperature=0.3,
         google_api_key=api_key
     )
 
-    qa_chain = RetrievalQA.from_chain_type(
-        llm=llm,
-        retriever=retriever,
-        chain_type="stuff",
-        return_source_documents=False
+    prompt = ChatPromptTemplate.from_template("""
+    Answer the question using the provided context.
+    If the answer is not in the context, say you don't know.
+
+    Context:
+    {context}
+
+    Question:
+    {question}
+    """)
+
+    rag_chain = (
+        {
+            "context": retriever,
+            "question": RunnablePassthrough()
+        }
+        | prompt
+        | llm
     )
-    return qa_chain
+
+    return rag_chain
 
 
-# Step 6: Rephrase Question (Optional UX polish)
-def rephrase_with_gemini(question, api_key):
-    prompt = ChatPromptTemplate.from_template(
-        "Give a short introductory sentence before answering the question: {question}"
-    )
 
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
-        google_api_key=api_key
-    )
-
-    chain = prompt | llm
-
-    try:
-        response = chain.invoke({"question": question})
-        return response.content.strip()
-    except Exception:
-        return question
 
 
 # Step 7: Handle user query
@@ -119,8 +115,8 @@ def user_input(question, api_key, history):
     retriever = st.session_state.vector_store.as_retriever()
     rag_chain = get_rag_chain(api_key, retriever)
 
-    result = rag_chain({"query": question})
-    answer = result["result"]
+    answer = rag_chain.invoke(question).content
+
 
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     intro = rephrase_with_gemini(question, api_key)
