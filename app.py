@@ -119,7 +119,8 @@ def user_input(question, api_key, history):
 
 
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    intro = rephrase_with_gemini(question, api_key)
+    intro = question
+
 
     history.append((question, answer, "Gemini", timestamp))
 
