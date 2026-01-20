@@ -19,7 +19,8 @@ from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import ChatPromptTemplate
 
 # Embeddings (LOCAL – NO QUOTA)
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
+
 
 # Gemini LLM
 from langchain_google_genai import ChatGoogleGenerativeAI
