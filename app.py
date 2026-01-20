@@ -116,12 +116,21 @@ def user_input(question, api_key, history):
     retriever = st.session_state.vector_store.as_retriever()
     rag_chain = get_rag_chain(api_key, retriever)
 
-    answer = rag_chain.invoke(question).content
+    # Invoke Gemini
+    response = rag_chain.invoke(question)
 
+    # ✅ Extract plain text safely from Gemini response
+    if isinstance(response.content, list):
+        answer = "".join(
+            block.get("text", "")
+            for block in response.content
+            if block.get("type") == "text"
+        )
+    else:
+        answer = response.content
 
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     intro = question
-
 
     history.append((question, answer, "Gemini", timestamp))
 
@@ -129,7 +138,6 @@ def user_input(question, api_key, history):
         display_chat(intro, answer, timestamp),
         unsafe_allow_html=True
     )
-
 
 def display_chat(user_msg, bot_msg, timestamp):
     return f"""
