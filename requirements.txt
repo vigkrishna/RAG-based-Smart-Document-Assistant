@@ -1,8 +1,10 @@
 streamlit
-PyPDF2
-faiss-cpu
-langchain
+langchain>=0.2.0
 langchain-community
+langchain-core
 langchain-google-genai
 google-generativeai
+sentence-transformers
+faiss-cpu
+PyPDF2
 pandas
