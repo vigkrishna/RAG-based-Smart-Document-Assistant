@@ -166,7 +166,7 @@ def main():
         st.session_state.conversation_history = []
 
     with st.sidebar:
-        st.title("Controls")
+        st.title("Smart Document Assistant")
 
         api_key = st.text_input("Google API Key", type="password")
 
@@ -194,6 +194,9 @@ def main():
 
         st.markdown("---")
         st.markdown("**Made with ❤️ by Krishna Vig**")
+        st.markdown(
+    "[🔗 Connect with me on LinkedIn](https://www.linkedin.com/in/krishna-vig-300304kv/)"
+)
 
     question = st.text_input("Ask a question from your PDFs")
 
